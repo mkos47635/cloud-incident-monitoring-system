@@ -1,33 +1,22 @@
-backend/.gradle/
-backend/build/
-backend/out/
+# Gradle
+.gradle/
+build/
+out/
 
-# Spring
-
-backend/HELP.md
+# Spring Boot
+HELP.md
 
 # Environment
+.env
+.env.*
 
-backend/.env
-backend/.env.*
-
-# =========================
-
-# IntelliJ
-
-# =========================
-
+# IntelliJ IDEA
 .idea/
 *.iws
 *.iml
 *.ipr
 
-# =========================
-
 # Eclipse / STS
-
-# =========================
-
 .apt_generated
 .classpath
 .factorypath
@@ -37,38 +26,19 @@ backend/.env.*
 .sts4-cache
 bin/
 
-# =========================
-
 # VS Code
-
-# =========================
-
 .vscode/*
 !.vscode/extensions.json
 
-# =========================
-
 # OS
-
-# =========================
-
 .DS_Store
 Thumbs.db
 
-# =========================
+# Logs
+logs/
+*.log
 
-# TypeScript
-
-# =========================
-
-*.tsbuildinfo
-
-# =========================
-
-# Misc
-
-# =========================
-
+# Temporary
 *.local
 *.tmp
 *.temp
