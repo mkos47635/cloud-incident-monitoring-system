@@ -74,4 +74,8 @@ public class Incident {
                 .build();
     }
 
+    public void updateStatus(IncidentStatus status) {
+        this.status = status;
+    }
+
 }
