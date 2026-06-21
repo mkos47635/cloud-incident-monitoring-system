@@ -1,13 +1,13 @@
 package com.cims.backend.controller;
 
+import com.cims.backend.common.response.ApiResponse;
+import com.cims.backend.dto.IncidentCreateRequest;
 import com.cims.backend.dto.IncidentResponse;
 import com.cims.backend.dto.IncidentStatusUpdateRequest;
 import com.cims.backend.service.IncidentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
-import com.cims.backend.dto.IncidentCreateRequest;
 
 import java.util.List;
 
@@ -19,34 +19,45 @@ public class IncidentController {
     private final IncidentService incidentService;
 
     @GetMapping
-    public List<IncidentResponse> getIncidents() {
-        return incidentService.getIncidents();
+    public ApiResponse<List<IncidentResponse>> getIncidents() {
+        return ApiResponse.success(
+                incidentService.getIncidents()
+        );
     }
 
     @PostMapping
-    public Long createIncident(
+    public ApiResponse<Long> createIncident(
             @Valid @RequestBody IncidentCreateRequest request
     ) {
-        return incidentService.createIncident(request);
+        return ApiResponse.success(
+                incidentService.createIncident(request)
+        );
     }
 
     @GetMapping("/{id}")
-    public IncidentResponse getIncident(@PathVariable Long id) {
-        return incidentService.getIncident(id);
+    public ApiResponse<IncidentResponse> getIncident(
+            @PathVariable Long id
+    ) {
+        return ApiResponse.success(
+                incidentService.getIncident(id)
+        );
     }
 
     @PatchMapping("/{id}/status")
-    public IncidentResponse updateStatus(
+    public ApiResponse<IncidentResponse> updateStatus(
             @PathVariable Long id,
             @Valid @RequestBody IncidentStatusUpdateRequest request
     ) {
-        return incidentService.updateStatus(id, request);
+        return ApiResponse.success(
+                incidentService.updateStatus(id, request)
+        );
     }
 
     @DeleteMapping("/{id}")
-    public void deleteIncident(@PathVariable Long id) {
+    public ApiResponse<Void> deleteIncident(
+            @PathVariable Long id
+    ) {
         incidentService.deleteIncident(id);
+        return ApiResponse.success();
     }
-
-
 }

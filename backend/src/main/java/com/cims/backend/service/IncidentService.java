@@ -1,15 +1,15 @@
 package com.cims.backend.service;
 
+import com.cims.backend.common.exception.BusinessException;
+import com.cims.backend.common.exception.ErrorCode;
+import com.cims.backend.dto.IncidentCreateRequest;
 import com.cims.backend.dto.IncidentResponse;
+import com.cims.backend.dto.IncidentStatusUpdateRequest;
+import com.cims.backend.entity.Incident;
 import com.cims.backend.repository.IncidentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
-import com.cims.backend.dto.IncidentCreateRequest;
-import com.cims.backend.entity.Incident;
-import com.cims.backend.dto.IncidentStatusUpdateRequest;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -28,7 +28,6 @@ public class IncidentService {
 
     @Transactional
     public Long createIncident(IncidentCreateRequest request) {
-
         Incident incident = Incident.create(
                 request.title(),
                 request.content(),
@@ -43,7 +42,7 @@ public class IncidentService {
 
     public IncidentResponse getIncident(Long id) {
         Incident incident = incidentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("장애 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.INCIDENT_NOT_FOUND));
 
         return IncidentResponse.from(incident);
     }
@@ -51,7 +50,7 @@ public class IncidentService {
     @Transactional
     public IncidentResponse updateStatus(Long id, IncidentStatusUpdateRequest request) {
         Incident incident = incidentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("장애 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.INCIDENT_NOT_FOUND));
 
         incident.updateStatus(request.status());
 
@@ -61,9 +60,8 @@ public class IncidentService {
     @Transactional
     public void deleteIncident(Long id) {
         Incident incident = incidentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("장애 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.INCIDENT_NOT_FOUND));
 
         incidentRepository.delete(incident);
     }
-
 }
