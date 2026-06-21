@@ -1,7 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "../components/Navbar";
+import { createIncident } from "../api/incidentApi";
+import type { IncidentType, Severity } from "../types/incident";
 
 function IncidentCreatePage() {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    title: "",
+    content: "",
+    type: "SERVER" as IncidentType,
+    severity: "LOW" as Severity,
+    status: "OPEN",
+    location: "",
+    assignee: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await createIncident(form);
+      navigate("/incidents");
+    } catch (error) {
+      console.error("장애 등록 실패", error);
+      alert("장애 등록에 실패했습니다.");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Navbar />
@@ -28,6 +64,9 @@ function IncidentCreatePage() {
                 제목
               </label>
               <input
+                name="title"
+                value={form.title}
+                onChange={handleChange}
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white"
                 placeholder="예: CPU 사용률 임계치 초과"
               />
@@ -38,6 +77,9 @@ function IncidentCreatePage() {
                 내용
               </label>
               <textarea
+                name="content"
+                value={form.content}
+                onChange={handleChange}
                 className="h-36 w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white"
                 placeholder="장애 내용을 입력하세요."
               />
@@ -48,12 +90,17 @@ function IncidentCreatePage() {
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   유형
                 </label>
-                <select className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white">
-                  <option>SERVER</option>
-                  <option>NETWORK</option>
-                  <option>DATABASE</option>
-                  <option>DEPLOYMENT</option>
-                  <option>OTHER</option>
+                <select
+                  name="type"
+                  value={form.type}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white"
+                >
+                  <option value="SERVER">SERVER</option>
+                  <option value="NETWORK">NETWORK</option>
+                  <option value="DATABASE">DATABASE</option>
+                  <option value="DEPLOYMENT">DEPLOYMENT</option>
+                  <option value="OTHER">OTHER</option>
                 </select>
               </div>
 
@@ -61,11 +108,16 @@ function IncidentCreatePage() {
                 <label className="mb-2 block text-sm font-semibold text-slate-700">
                   심각도
                 </label>
-                <select className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white">
-                  <option>LOW</option>
-                  <option>MEDIUM</option>
-                  <option>HIGH</option>
-                  <option>CRITICAL</option>
+                <select
+                  name="severity"
+                  value={form.severity}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white"
+                >
+                  <option value="LOW">LOW</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="HIGH">HIGH</option>
+                  <option value="CRITICAL">CRITICAL</option>
                 </select>
               </div>
             </div>
@@ -76,6 +128,9 @@ function IncidentCreatePage() {
                   발생 위치
                 </label>
                 <input
+                  name="location"
+                  value={form.location}
+                  onChange={handleChange}
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white"
                   placeholder="예: EC2-WEB-01"
                 />
@@ -86,6 +141,9 @@ function IncidentCreatePage() {
                   담당자
                 </label>
                 <input
+                  name="assignee"
+                  value={form.assignee}
+                  onChange={handleChange}
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 outline-none transition focus:border-blue-400 focus:bg-white"
                   placeholder="예: 박성원"
                 />
@@ -100,7 +158,11 @@ function IncidentCreatePage() {
                 취소
               </Link>
 
-              <button className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+              >
                 등록
               </button>
             </div>

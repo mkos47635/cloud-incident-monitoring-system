@@ -1,24 +1,23 @@
-import type { Severity } from "../types/incident";
+import type { IncidentStatus } from "../types/incident";
 
-interface SeverityBadgeProps {
-  severity: Severity;
+interface StatusBadgeProps {
+  status: IncidentStatus;
 }
 
-const severityStyle = {
-  LOW: "bg-slate-100 text-slate-700",
-  MEDIUM: "bg-amber-100 text-amber-700",
-  HIGH: "bg-orange-100 text-orange-700",
-  CRITICAL: "bg-rose-100 text-rose-700",
-};
+function StatusBadge({ status }: StatusBadgeProps) {
+  const statusStyle = {
+    OPEN: "bg-red-100 text-red-700",
+    INVESTIGATING: "bg-yellow-100 text-yellow-700",
+    IN_PROGRESS: "bg-blue-100 text-blue-700",
+    RESOLVED: "bg-green-100 text-green-700",
+    CLOSED: "bg-slate-100 text-slate-700",
+  };
 
-function SeverityBadge({ severity }: SeverityBadgeProps) {
   return (
-    <span
-      className={`rounded-full px-3 py-1 text-xs font-semibold ${severityStyle[severity]}`}
-    >
-      {severity}
+    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusStyle[status]}`}>
+      {status}
     </span>
   );
 }
 
-export default SeverityBadge;
+export default StatusBadge;

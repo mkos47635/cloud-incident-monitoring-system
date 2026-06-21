@@ -18,6 +18,9 @@ function Navbar() {
           <Link to="/incidents/new" className="hover:text-blue-600">
             장애 등록
           </Link>
+          <Link to="/servers" className="hover:text-blue-600">
+            서버 상태
+          </Link>
         </nav>
       </div>
     </header>

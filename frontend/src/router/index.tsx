@@ -3,6 +3,7 @@ import DashboardPage from "../pages/DashboardPage";
 import IncidentListPage from "../pages/IncidentListPage";
 import IncidentDetailPage from "../pages/IncidentDetailPage";
 import IncidentCreatePage from "../pages/IncidentCreatePage";
+import ServerStatusPage from "../pages/ServerStatusPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,5 +21,9 @@ export const router = createBrowserRouter([
   {
     path: "/incidents/new",
     element: <IncidentCreatePage />,
+  },
+  {
+    path: "/servers",
+    element: <ServerStatusPage />,
   },
 ]);

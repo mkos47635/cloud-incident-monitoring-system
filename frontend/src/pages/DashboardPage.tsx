@@ -1,17 +1,27 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import ServerStatusCard from "../components/ServerStatusCard";
-import { incidents } from "../mock/incidents";
-import { serverStatus } from "../mock/serverStatus";
+import { useEffect, useState } from "react";
+import { getIncidents } from "../api/incidentApi";
+import { getDashboard } from "../api/dashboardApi";
+import type { Dashboard } from "../types/dashboard";
+import type { Incident } from "../types/incident";
 
 function DashboardPage() {
-  const unresolvedCount = incidents.filter(
-    (incident) => incident.status !== "CLOSED" && incident.status !== "RESOLVED"
-  ).length;
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [dashboard, setDashboard] = useState<Dashboard | null>(null);
 
-  const highCount = incidents.filter(
-    (incident) => incident.severity === "HIGH" || incident.severity === "CRITICAL"
-  ).length;
+  useEffect(() => {
+    const fetchData = async () => {
+      const incidentResponse = await getIncidents();
+      const dashboardResponse = await getDashboard();
+
+      setIncidents(incidentResponse.data);
+      setDashboard(dashboardResponse.data);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -33,15 +43,15 @@ function DashboardPage() {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <span className="rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700">
-              Server Status: {serverStatus.status}
+              API Connected
             </span>
 
             <span className="rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700">
-              {serverStatus.serverName}
+              Spring Boot + MySQL
             </span>
 
             <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-600">
-              Checked: {serverStatus.checkedAt}
+              Incident Count: {incidents.length}
             </span>
           </div>
         </section>
@@ -49,21 +59,21 @@ function DashboardPage() {
         <section className="grid gap-6 md:grid-cols-3">
           <ServerStatusCard
             title="CPU Usage"
-            value={serverStatus.cpuUsage}
+            value={dashboard?.cpuUsage ?? 0}
             unit="%"
             color="blue"
           />
 
           <ServerStatusCard
             title="Memory Usage"
-            value={serverStatus.memoryUsage}
+            value={dashboard?.memoryUsage ?? 0}
             unit="%"
             color="green"
           />
 
           <ServerStatusCard
             title="Disk Usage"
-            value={serverStatus.diskUsage}
+            value={dashboard?.diskUsage ?? 0}
             unit="%"
             color="purple"
           />
@@ -73,7 +83,7 @@ function DashboardPage() {
           <div className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
             <p className="text-sm font-medium text-slate-500">미해결 장애</p>
             <p className="mt-3 text-4xl font-bold text-slate-900">
-              {unresolvedCount}건
+              {dashboard?.unresolvedCount ?? 0}건
             </p>
             <p className="mt-2 text-sm text-slate-500">
               현재 처리 중인 장애 건수입니다.
@@ -83,7 +93,7 @@ function DashboardPage() {
           <div className="rounded-2xl bg-white p-6 shadow-md ring-1 ring-slate-200">
             <p className="text-sm font-medium text-slate-500">HIGH 이상 장애</p>
             <p className="mt-3 text-4xl font-bold text-rose-600">
-              {highCount}건
+              {dashboard?.highSeverityCount ?? 0}건
             </p>
             <p className="mt-2 text-sm text-slate-500">
               우선 확인이 필요한 장애입니다.
