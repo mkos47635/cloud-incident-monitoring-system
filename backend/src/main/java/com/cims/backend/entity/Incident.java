@@ -55,4 +55,23 @@ public class Incident {
     public void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    public static Incident create(
+            String title,
+            String content,
+            IncidentType type,
+            IncidentSeverity severity,
+            String location,
+            String assignee
+    ) {
+        return Incident.builder()
+                .title(title)
+                .content(content)
+                .type(type)
+                .severity(severity)
+                .location(location)
+                .assignee(assignee)
+                .build();
+    }
+
 }

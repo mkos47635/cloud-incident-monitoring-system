@@ -5,6 +5,9 @@ import com.cims.backend.service.IncidentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import com.cims.backend.dto.IncidentCreateRequest;
+
 import java.util.List;
 
 @RestController
@@ -17,5 +20,12 @@ public class IncidentController {
     @GetMapping
     public List<IncidentResponse> getIncidents() {
         return incidentService.getIncidents();
+    }
+
+    @PostMapping
+    public Long createIncident(
+            @Valid @RequestBody IncidentCreateRequest request
+    ) {
+        return incidentService.createIncident(request);
     }
 }
