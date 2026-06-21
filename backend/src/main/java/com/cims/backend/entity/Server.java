@@ -67,4 +67,16 @@ public class Server {
                 .diskUsage(diskUsage)
                 .build();
     }
+
+    public void updateMetrics(
+            int cpuUsage,
+            int memoryUsage,
+            int diskUsage,
+            ServerStatus status
+    ) {
+        this.cpuUsage = cpuUsage;
+        this.memoryUsage = memoryUsage;
+        this.diskUsage = diskUsage;
+        this.status = status;
+    }
 }

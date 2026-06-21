@@ -2,6 +2,7 @@ package com.cims.backend.controller;
 
 import com.cims.backend.common.response.ApiResponse;
 import com.cims.backend.dto.ServerCreateRequest;
+import com.cims.backend.dto.ServerMetricUpdateRequest;
 import com.cims.backend.dto.ServerResponse;
 import com.cims.backend.service.ServerService;
 import jakarta.validation.Valid;
@@ -32,5 +33,15 @@ public class ServerController {
             @Valid @RequestBody ServerCreateRequest request
     ) {
         return ApiResponse.success(serverService.createServer(request));
+    }
+
+    @PatchMapping("/{id}/metrics")
+    public ApiResponse<ServerResponse> updateMetrics(
+            @PathVariable Long id,
+            @Valid @RequestBody ServerMetricUpdateRequest request
+    ) {
+        return ApiResponse.success(
+                serverService.updateMetrics(id, request)
+        );
     }
 }

@@ -78,4 +78,8 @@ public class Incident {
         this.status = status;
     }
 
+    public void resolve() {
+        this.status = IncidentStatus.RESOLVED;
+    }
+
 }
