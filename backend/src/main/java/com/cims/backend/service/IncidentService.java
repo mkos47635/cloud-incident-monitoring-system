@@ -19,6 +19,7 @@ public class IncidentService {
 
     private final IncidentRepository incidentRepository;
 
+    // 전체 장애 목록을 조회.
     public List<IncidentResponse> getIncidents() {
         return incidentRepository.findAll()
                 .stream()
@@ -26,6 +27,7 @@ public class IncidentService {
                 .toList();
     }
 
+     // 새로운 장애를 등록.
     @Transactional
     public Long createIncident(IncidentCreateRequest request) {
         Incident incident = Incident.create(
@@ -40,6 +42,7 @@ public class IncidentService {
         return incidentRepository.save(incident).getId();
     }
 
+    // 장애 ID를 기준으로 상세 정보를 조회.
     public IncidentResponse getIncident(Long id) {
         Incident incident = incidentRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INCIDENT_NOT_FOUND));
@@ -47,6 +50,7 @@ public class IncidentService {
         return IncidentResponse.from(incident);
     }
 
+    // 장애 처리 상태를 변경.
     @Transactional
     public IncidentResponse updateStatus(Long id, IncidentStatusUpdateRequest request) {
         Incident incident = incidentRepository.findById(id)
@@ -57,6 +61,7 @@ public class IncidentService {
         return IncidentResponse.from(incident);
     }
 
+    // 장애 정보를 삭제.
     @Transactional
     public void deleteIncident(Long id) {
         Incident incident = incidentRepository.findById(id)
