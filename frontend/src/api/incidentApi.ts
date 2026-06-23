@@ -1,12 +1,12 @@
 import api from "./axios";
 
 export const getIncidents = async () => {
-  const response = await api.get("/api/incidents");
+  const response = await api.get("/incidents");
   return response.data;
 };
 
 export const getIncident = async (id: number) => {
-  const response = await api.get(`/api/incidents/${id}`);
+  const response = await api.get(`/incidents/${id}`);
   return response.data;
 };
 
@@ -18,7 +18,7 @@ export const createIncident = async (data: {
   location: string;
   assignee: string;
 }) => {
-  const response = await api.post("/api/incidents", data);
+  const response = await api.post("/incidents", data);
   return response.data;
 };
 
@@ -27,7 +27,7 @@ export const updateIncidentStatus = async (
   status: string
 ) => {
   const response = await api.patch(
-    `/api/incidents/${id}/status`,
+    `/incidents/${id}/status`,
     {
       status,
     }
@@ -37,6 +37,6 @@ export const updateIncidentStatus = async (
 };
 
 export const deleteIncident = async (id: number) => {
-  const response = await api.delete(`/api/incidents/${id}`);
+  const response = await api.delete(`/incidents/${id}`);
   return response.data;
 };

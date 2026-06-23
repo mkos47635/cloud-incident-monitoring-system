@@ -1,12 +1,12 @@
 import api from "./axios";
 
 export const getServers = async () => {
-  const response = await api.get("/api/servers");
+  const response = await api.get("/servers");
   return response.data;
 };
 
 export const getServer = async (id: number) => {
-  const response = await api.get(`/api/servers/${id}`);
+  const response = await api.get(`/servers/${id}`);
   return response.data;
 };
 
@@ -17,7 +17,7 @@ export const createServer = async (data: {
   memoryUsage: number;
   diskUsage: number;
 }) => {
-  const response = await api.post("/api/servers", data);
+  const response = await api.post("/servers", data);
   return response.data;
 };
 
@@ -29,6 +29,6 @@ export const updateServerMetrics = async (
     diskUsage: number;
   }
 ) => {
-  const response = await api.patch(`/api/servers/${id}/metrics`, data);
+  const response = await api.patch(`/servers/${id}/metrics`, data);
   return response.data;
 };
