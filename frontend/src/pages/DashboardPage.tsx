@@ -13,14 +13,27 @@ function DashboardPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const incidentResponse = await getIncidents();
-      const dashboardResponse = await getDashboard();
+      try {
+        const [incidentResponse, dashboardResponse] = await Promise.all([
+          getIncidents(),
+          getDashboard(),
+        ]);
 
-      setIncidents(incidentResponse.data);
-      setDashboard(dashboardResponse.data);
+        setIncidents(incidentResponse.data);
+        setDashboard(dashboardResponse.data);
+      } catch (error) {
+        console.error("데이터 조회 실패", error);
+      }
     };
 
+    // 최초 조회
     fetchData();
+
+    // 5초마다 갱신
+    const interval = setInterval(fetchData, 5000);
+
+    // 페이지 벗어나면 정리
+    return () => clearInterval(interval);
   }, []);
 
   return (
